@@ -4,9 +4,11 @@ import pluginReact from "eslint-plugin-react";
 
 
 /** @type {import('eslint').Linter.Config[]} */
-export default [
-  {files: ["**/*.{js,mjs,cjs,jsx}"]},
-  {languageOptions: { globals: globals.browser }},
+
+const eslintArr = [
+  { files: ["**/*.{js,mjs,cjs,jsx}"] },
+  { languageOptions: { globals: globals.browser } },
   pluginJs.configs.recommended,
   pluginReact.configs.flat.recommended,
-];
+]
+export default eslintArr;
