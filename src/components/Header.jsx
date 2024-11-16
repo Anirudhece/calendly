@@ -2,6 +2,7 @@ import React from 'react'
 import { Button } from './ui/button'
 import Link from 'next/link'
 import { SignedIn, SignInButton, SignedOut, UserButton } from '@clerk/nextjs'
+import ModeToggle from './ModeToggle'
 
 const Header = () => {
     return (
@@ -21,6 +22,8 @@ const Header = () => {
                 <SignedIn >{/* this will only render when user is loged in */}
                     <UserButton />
                 </SignedIn>
+
+                <ModeToggle/>
             </div>
         </div>
     )
