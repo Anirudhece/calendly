@@ -12,19 +12,23 @@ export const checkUser = async () => {
   if (!user) return null;
 
   try {
-    const logedInUser = db.user.findUnique({
+    const logedInUser = await db?.user?.findUnique({
       where: { clerkUserId: user.id },
     });
 
     if (logedInUser) return logedInUser;
 
-    const name = user.firstName + " " + user.lastName;
+    const name = user?.firstName + " " + user?.lastName;
 
-    await clerkClient().users.updateUser(user.id, {
-      username: name.split(" ").join("-") + user.id.slice(-4),
-    });
+    try {
+      await clerkClient()?.users?.updateUser(user.id, {
+        username: name.split(" ").join("-") + user.id.slice(-4),
+      });
+    } catch (err) {
+      console.log("error creating user in clerkClient", err);
+    }
 
-    const newUser = await db.user.create({
+    const newUser = await db?.user?.create({
       data: {
         clerkUserId: user.id,
         name: name,
