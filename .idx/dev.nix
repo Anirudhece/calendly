@@ -9,9 +9,12 @@
     pkgs.yarn
     pkgs.nodePackages.pnpm
     pkgs.bun
+    pkgs.openssl.dev #not sure why iam adding .dev in the end
   ];
   # Sets environment variables in the workspace
-  env = {};
+  env = {
+      NODE_ENV = "development"; # Or "production" when deploying
+    };
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
