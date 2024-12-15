@@ -27,20 +27,18 @@ export default function AppLayout({ children }) {
           <nav>
             <ul>
               {navItems.map((item) => (
-                <>
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className={`flex items-center px-4 py-4 ${
-                        pathname === item.href && "bg-blue-100 text-gray-700"
-                      }`}
-                    >
-                      <item.icon className="w-5 h-5 mr-3" />
-                      {item.label}
-                    </Link>
-                  </li>
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className={`flex items-center px-4 py-4 ${
+                      pathname === item.href && "bg-blue-100 text-gray-700"
+                    }`}
+                  >
+                    <item.icon className="w-5 h-5 mr-3" />
+                    {item.label}
+                  </Link>
                   <Separator />
-                </>
+                </li>
               ))}
             </ul>
           </nav>
@@ -66,7 +64,7 @@ export default function AppLayout({ children }) {
                 <Link
                   href={item.href}
                   className={`flex flex-col items-center py-2 px-4 ${
-                    pathname === item.href && "text-blue-600" 
+                    pathname === item.href && "text-blue-600"
                   }`}
                 >
                   <item.icon className="w-6 h-6" />
