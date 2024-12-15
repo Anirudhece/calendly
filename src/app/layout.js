@@ -29,8 +29,8 @@ export default function RootLayout({ children }) {
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 
             <Header />
-            <main className="min-h-screen p-2" >{children}</main>
-            <footer className="text-center bg-purple-950 p-2">Made with ❤️ by Anirudh</footer>
+            <main className="l1 p-2" >{children}</main>
+            {/* <footer className="text-center bg-purple-950 p-2">Made with ❤️ by Anirudh</footer> */}
 
           </ThemeProvider>
 
