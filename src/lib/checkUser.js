@@ -18,7 +18,7 @@ export const checkUser = async () => {
 
     if (logedInUser) return logedInUser;
 
-    const name = user?.firstName + " " + user?.lastName;
+    const name = (user?.firstName || '') + " " + (user?.lastName || '');
 
     try {
       await clerkClient()?.users?.updateUser(user.id, {
@@ -30,11 +30,11 @@ export const checkUser = async () => {
 
     const newUser = await db?.user?.create({
       data: {
-        clerkUserId: user.id,
+        clerkUserId: user?.id,
         name: name,
-        imageUrl: user.imageUrl,
-        email: user.emailAddresses[0].emailAddress,
-        username: name.split(" ").join("-") + user.id.slice(-4),
+        imageUrl: user?.imageUrl,
+        email: user?.emailAddresses[0]?.emailAddress,
+        username: name?.split(" ").join("-") + user?.id?.slice(-4),
       },
     });
 
