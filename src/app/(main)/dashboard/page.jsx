@@ -36,7 +36,6 @@ const DashBoard = () => {
   };
 
   useEffect(() => {
-    console.log("username", user?.username);
     setValue("username", user?.username);
   }, [isLoaded, user, setValue]);
 

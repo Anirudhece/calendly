@@ -3,7 +3,6 @@ import { db } from "@/lib/prisma";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 
 const updateUsername = async (username) => {
-
   if (!username || typeof username !== "string" || username.trim() === "") {
     throw new Error("Invalid username");
   }
@@ -34,8 +33,8 @@ const updateUsername = async (username) => {
       data: { username },
     });
 
-    const { users } = await clerkClient();
-    await users.updateUser(userId, { username });
+    const { users: ClerkUser } = await clerkClient();
+    await ClerkUser.updateUser(userId, { username });
 
     return { success: true };
   } catch (err) {

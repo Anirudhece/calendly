@@ -30,7 +30,8 @@ export const checkUser = async () => {
     };
 
     try {
-      (await clerkClient()).users?.updateUser(user.id, {
+      const { users: ClerkUser } = await clerkClient();
+      await ClerkUser.updateUser(user.id, {
         username: newUserData?.username,
       });
     } catch (err) {
