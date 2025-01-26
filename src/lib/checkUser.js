@@ -20,14 +20,6 @@ export const checkUser = async () => {
 
     const name = (user?.firstName || "") + " " + (user?.lastName || "");
 
-    try {
-      await clerkClient()?.users?.updateUser(user.id, {
-        username: name.split(" ").join("-") + user.id.slice(-4),
-      });
-    } catch (err) {
-      console.log("error creating user in clerkClient", err);
-    }
-
     /** creating this object because directly passing it in newUSer was giving bug in name  */
     const newUserData = {
       clerkUserId: user?.id,
@@ -36,6 +28,14 @@ export const checkUser = async () => {
       email: user?.emailAddresses[0]?.emailAddress,
       username: name?.split(" ").join("-") + user?.id?.slice(-4),
     };
+
+    try {
+      (await clerkClient()).users?.updateUser(user.id, {
+        username: newUserData?.username,
+      });
+    } catch (err) {
+      console.log("error creating user in clerkClient", err);
+    }
 
     const newUser = await db?.user?.create({
       data: newUserData,

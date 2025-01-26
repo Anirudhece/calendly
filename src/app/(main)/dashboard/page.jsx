@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { usernameSchema } from "@/app/validators/validator";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { updateUsername } from "@/actions/users";
+import useFetch from "@/hooks/use-fetch";
 
 const DashBoard = () => {
   /** Clerk User */
@@ -27,13 +29,15 @@ const DashBoard = () => {
     resolver: zodResolver(usernameSchema),
   });
 
+  const { loading, error, fn: fnUpdateUsername } = useFetch(updateUsername);
+
   const onSubmit = async (data) => {
-    console.log("data:", data);
-    console.log("data2:", data);
+    fnUpdateUsername(data?.username);
   };
 
   useEffect(() => {
-    setValue("username", user?.username); // remeber to swap username with username
+    console.log("username", user?.username);
+    setValue("username", user?.username);
   }, [isLoaded, user, setValue]);
 
   return (
@@ -62,14 +66,16 @@ const DashBoard = () => {
             </div>
 
             {errors?.username && (
-              <p className="text-red-500 text-sm">
+              <p className="text-red-500 text-sm mt-1">
                 {errors?.username?.message}
               </p>
             )}
+            {error && <p className="text-red-500 text-sm mt-1">
+              {error?.message}
+            </p>}
+            {loading && <p>Updating...</p>}
 
-            <Button type="submit" size="sm">
-              Update Username
-            </Button>
+            <Button type="submit" size="sm">Update Username</Button>
           </form>
         </CardContent>
       </Card>
