@@ -59,7 +59,7 @@ const DashBoard = () => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center break-all">
               {window?.location?.origin}
               <Input {...register("username")} placeholder="username" />
             </div>

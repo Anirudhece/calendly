@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ClerkProvider } from '@clerk/nextjs';
 import {ThemeProvider} from "@/components/theme-provider";
+import CreateEventDrawer  from "@/components/create-event";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,6 +33,7 @@ export default function RootLayout({ children }) {
             <main className="l1 p-2" >{children}</main>
             {/* <footer className="text-center bg-purple-950 p-2">Made with ❤️ by Anirudh</footer> */}
 
+            <CreateEventDrawer/>
           </ThemeProvider>
 
         </body>

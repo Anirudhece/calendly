@@ -14,7 +14,7 @@ const Header = async () => {
       <Link href={"/"}>Scheduler</Link>
       <div className="flex space-x-5 	items-center">
         <Button>
-          <Link href={"/create"}>Create event</Link>
+          <Link passHref href={"?create=true"}>Create event</Link>
         </Button>
 
         <SignedOut>
