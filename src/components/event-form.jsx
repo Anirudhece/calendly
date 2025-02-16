@@ -1,3 +1,5 @@
+'use client';
+
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,10 +8,14 @@ import { Input } from "./ui/input";
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "./ui/button";
+import { createEvent } from "@/actions/events";
+import { useRouter } from "next/navigation";
+import useFetch from "@/hooks/use-fetch";
 
+const EventForm = ({ onSubmitForm }) => {
 
+  const router = useRouter();
 
-const EventForm = () => {
   const {
     register,
     handleSubmit,
@@ -19,9 +25,20 @@ const EventForm = () => {
     resolver: zodResolver(eventSchema),
     defaultValues: { duration: 30, isPrivate: true },
   });
+
+  const { loading, error, fn: fnCreateEvent } = useFetch(createEvent)
+
+  const onSubmit = async (data) => {
+    await fnCreateEvent(data);
+    if (!loading && !error) {
+      onSubmitForm()
+    }
+    router.refresh();
+  }
+
   return (
     <>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <label htmlFor="title" className="block text-sm font-medium " >
             Event Title
@@ -50,29 +67,39 @@ const EventForm = () => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="isPrivate" className="block text-sm font-medium " >
+          <label htmlFor="isPrivate" className="block text-sm font-medium mb-1 " >
             Event Privacy
           </label>
 
-          <Controller name='isPrivate' control={control}
-            render={(field) => {
-              <Select value={field.value ? "true" : "false"}
-                onValueChange={(value) => field.onChange(value === 'true')}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Privacy" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="true">Private</SelectItem>
-                  <SelectItem value="false">Public</SelectItem>
-                </SelectContent>
-              </Select>
+          <Controller
+            name="isPrivate"
+            control={control}
+            render={({ field }) => {
+              return (
+                <Select
+                  value={field.value ? "true" : "false"}
+                  onValueChange={(value) => field.onChange(value === 'true')}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select Privacy" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="true">Private</SelectItem>
+                    <SelectItem value="false">Public</SelectItem>
+                  </SelectContent>
+                </Select>
+              );
             }}
           />
+
           {errors.isPrivate && <p className="text-red-500 text-sm mt-1">{errors.isPrivate.message}</p>}
         </div>
 
-        <Button className='w-full' type='submit'>Submit</Button>
+        {error && <p className="text-red-500 text-sm mt-1">{error.message}</p>}
+
+        <Button disabled={loading} className='w-full' type='submit'>
+          {loading ? "Submiting..." : "Create Event"}
+        </Button>
 
       </form>
 

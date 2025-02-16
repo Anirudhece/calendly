@@ -22,7 +22,7 @@ export const eventSchema = z.object({
     .min(1, { message: "Title must be at least 1 characters long" })
     .max(100, { message: "Title must be at most 100 characters long" }),
 
-  Description: z
+  description: z
     .string()
     .min(1, { message: "Description must be at least 1 characters long" })
     .max(500, { message: "Description must be at most 500 characters long" }),

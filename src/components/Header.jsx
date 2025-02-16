@@ -13,9 +13,9 @@ const Header = async () => {
     <div className="flex justify-between items-center bg-blue-800 p-2">
       <Link href={"/"}>Scheduler</Link>
       <div className="flex space-x-5 	items-center">
-        <Button>
-          <Link passHref href={"?create=true"}>Create event</Link>
-        </Button>
+        <Link passHref href="?create=true">
+          <Button>Create event</Button>
+        </Link>
 
         <SignedOut>
           {/* this will only render when user is not loged in */}

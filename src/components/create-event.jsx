@@ -44,7 +44,7 @@ export default function DrawerDemo() {
           {/* <DrawerDescription>Set your daily activity goal.</DrawerDescription> */}
         </DrawerHeader>
         <div className="p-4 pb-0">
-          <EventForm onSubmit={() => handleClose} />
+          <EventForm onSubmitForm={()=>handleClose()} /> 
         </div>
         <DrawerFooter>
           <DrawerClose asChild>
