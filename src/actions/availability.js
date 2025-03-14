@@ -10,24 +10,17 @@ export async function getUserAvailability() {
       throw new Error("Unautherized ‼️");
     }
 
-    // const user = await db.user.findUnique({
-    //   where: { clerkUserId: userId },
-    //   include: {
-    //     availability: { days: true },
-    //   },
-    // });
-
     const user = await db.user.findUnique({
       where: { clerkUserId: userId },
       include: {
         availability: {
-          include: { days: true }, // Use `include` instead of direct property access
+          include: { days: true },
         },
       },
     });
-    
+
     if (!user || !user.availability) {
-      return null
+      return null;
       // throw new Error("User not found or not available ‼️");
     }
 
@@ -61,5 +54,74 @@ export async function getUserAvailability() {
   } catch (err) {
     console.error(`error occured inside availability action 🙀: ${err}`);
     return null;
+  }
+}
+
+export async function updateAvailability(data) {
+  try {
+    const { userId } = await auth();
+
+    if (!userId) {
+      throw new Error("Unauthorized ‼️");
+    }
+
+    const user = await db.user.findUnique({
+      where: { clerkUserId: userId },
+      include: {
+        availability: true,
+      },
+    });
+
+    if (!user) {
+      throw new Error("User not found or not available ‼️");
+    }
+
+    const availabilityData = Object.entries(data).flatMap(
+      ([day, { isAvailable, startTime, endTime }]) => {
+        if (isAvailable) {
+          const baseDate = new Date().toISOString().split("T")[0];
+          return [
+            {
+              day: day.toUpperCase(),
+              startTime: new Date(`${baseDate}T${startTime}`),
+              endTime: new Date(`${baseDate}T${endTime}`),
+            },
+          ];
+        }
+        return [];
+      }
+    );
+
+    if (user.availability) {
+      await db.dayAvailability.deleteMany({
+        where: { availabilityId: user.availability.id },
+      });
+
+      await db.availability.update({
+        where: { id: user.availability.id },
+        data: {
+          timeGap: data.timeGap,
+          days: {
+            create: availabilityData,
+          },
+        },
+      });
+    } else {
+      // Create new availability if none exists
+      await db.availability.create({
+        data: {
+          userId: user.id,
+          timeGap: data.timeGap,
+          days: {
+            create: availabilityData,
+          },
+        },
+      });
+    }
+
+    return { success: true };
+  } catch (err) {
+    console.error(`error occured inside updateAvailability action 🙀: ${err}`);
+    return { success: false };
   }
 }

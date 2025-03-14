@@ -8,9 +8,7 @@ const AvailablilityPage = async () => {
 
   return (
     <div>
-      availablility availablility availablility availablility availablility
-      availablility
-      <AvailabilityForm intitialData={availability || defaultAvailability} />
+      <AvailabilityForm initialData={availability || defaultAvailability} />
     </div>
   );
 };
