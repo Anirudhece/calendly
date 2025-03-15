@@ -1,5 +1,6 @@
+/* eslint-disable react/prop-types */
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Card,
@@ -25,7 +26,8 @@ const EventCard = ({ event, username }) => {
       : event.description.indexOf(".")
   );
 
-  const handleCopy = async () => {
+  const handleCopy = async (e) => {
+    e.stopPropagation();
     try {
       await navigator.clipboard.writeText(
         `${window.location.origin}/${username}/${event.id}`
@@ -41,20 +43,27 @@ const EventCard = ({ event, username }) => {
 
   const { loading, fn: fnDeleteEvent } = useFetch(deleteEvent);
 
-  useEffect(() => {
-    console.log(loading);
-  }, [loading]);
-
-  const handleDelete = async () => {
+  const handleDelete = async (e) => {
+    e.stopPropagation();
     if (window?.confirm("Are you sure you want to delete this event?")) {
       await fnDeleteEvent(event.id);
       router.refresh();
     }
   };
 
+  const handleCardClick = (e) => {
+
+    if (e.target.tagName !== "BUTTON" && e.target.tagName !== "SVG") {
+      window?.open(`${window.location.origin}/${username}/${event.id}`,"_blank");
+    }
+  };
+
   return (
     <>
-      <Card className="cursor-pointer flex flex-col justify-between">
+      <Card
+        onClick={handleCardClick}
+        className="cursor-pointer flex flex-col justify-between"
+      >
         <CardHeader>
           <CardTitle className="text-xl">{event?.title}</CardTitle>
           <CardDescription className="flex justify-between">
@@ -67,29 +76,28 @@ const EventCard = ({ event, username }) => {
         <CardContent>
           <p>{description}</p>
         </CardContent>
-        {event?.isPrivate && (
-          <CardFooter>
-            <Button
-              disabled={isCopied}
-              variant="outline"
-              size="sm"
-              onClick={handleCopy}
-            >
-              {" "}
-              <Link /> {isCopied ? "Copied!" : "Copy Link"}
-            </Button>
-            <Button
-              onClick={handleDelete}
-              className="ml-2"
-              variant="destructive"
-              size="sm"
-              disabled={loading}
-            >
-              {" "}
-              {loading ? <Loader2 className="animate-spin"/> : <Trash />} Delete
-            </Button>
-          </CardFooter>
-        )}
+
+        <CardFooter>
+          <Button
+            disabled={isCopied}
+            variant="outline"
+            size="sm"
+            onClick={handleCopy}
+          >
+            {" "}
+            <Link /> {isCopied ? "Copied!" : "Copy Link"}
+          </Button>
+          <Button
+            onClick={handleDelete}
+            className="ml-2"
+            variant="destructive"
+            size="sm"
+            disabled={loading}
+          >
+            {" "}
+            {loading ? <Loader2 className="animate-spin" /> : <Trash />} Delete
+          </Button>
+        </CardFooter>
       </Card>
     </>
   );

@@ -1,10 +1,11 @@
 import React from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { SignedIn, SignInButton, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignInButton, SignedOut } from "@clerk/nextjs";
 import ModeToggle from "./ModeToggle";
 import UserMenu from "./user-menu";
 import { checkUser } from "@/lib/checkUser";
+import { Toggle } from "./ui/toggle";
 
 const Header = async () => {
   await checkUser();
@@ -30,6 +31,7 @@ const Header = async () => {
         </SignedIn>
 
         <ModeToggle />
+        {/* <Toggle/> */}
       </div>
     </div>
   );
