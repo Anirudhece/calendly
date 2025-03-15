@@ -4,7 +4,6 @@ import {
   CardHeader,
   CardTitle,
   CardContent,
-  CardDescription,
 } from "@/components/ui/card";
 import React, { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
